@@ -1,7 +1,5 @@
 const express = require('express');
 const dotenv = require('dotenv');
-const morgan = require('morgan');
-const { notFound, errorHandler } = require('./middleware/errorMiddleware');
 const connectDB = require('./config/db');
 
 const postRoutes = require('./routes/postRoutes');
@@ -12,11 +10,7 @@ connectDB();
 
 const app = express();
 
-if (process.env.NODE_ENV === 'development') {
-  app.use(morgan('dev'));
-}
-
-// be able to access bodyparser middleware
+// bodyparser middleware
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -24,9 +18,6 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/posts', postRoutes);
-
-app.use(notFound);
-app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 app.listen(

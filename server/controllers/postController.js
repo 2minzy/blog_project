@@ -5,15 +5,19 @@ const Post = require('../models/postModel');
 // @route   POST /api/posts
 // @access  admin
 const createPost = asyncHandler(async (req, res) => {
-  const { title, body } = req.body;
+  try {
+    const { title, body } = req.body;
+    // For slug
+    // const { name, slug } = req.body;
+    // if (slug === '') {
+    //   slug = name.toLowerCase().replace(' ','-')
+    // }
+    const createdPost = await Post.create({ title, body });
 
-  const post = new Post({
-    title,
-    body,
-  });
-
-  const createdPost = await post.save();
-  res.status(201).json(createdPost);
+    res.status(201).json(createdPost);
+  } catch (error) {
+    res.status(400).json({ message: "can't create post", error });
+  }
 });
 
 // @desc    Fetch all prosts
@@ -34,8 +38,7 @@ const getPostById = asyncHandler(async (req, res) => {
   if (post) {
     res.json(post);
   } else {
-    res.status(404);
-    throw new Error('Post not Found');
+    res.status(404).json({ message: 'post not found' });
   }
 });
 
@@ -43,14 +46,12 @@ const getPostById = asyncHandler(async (req, res) => {
 // @route   DELETE /api/products/:id
 // @access  admin
 const deletePost = asyncHandler(async (req, res) => {
-  const post = await Post.findById(req.params.id);
+  const deletedPost = await Post.findByIdAndDelete(req.params.id);
 
-  if (post) {
-    await post.remove();
-    res.json({ message: 'Post removed successfully' });
+  if (deletedPost) {
+    res.json(deletedPost);
   } else {
-    res.status(404);
-    throw new Error('Post not found');
+    res.status(404).json({ message: 'post not found' });
   }
 });
 
@@ -58,19 +59,17 @@ const deletePost = asyncHandler(async (req, res) => {
 // @route   UPDATE /api/products/:id
 // @access  admin
 const updatePost = asyncHandler(async (req, res) => {
-  const { title, body } = req.body;
-
-  const post = await Post.findById(req.params.id);
-
-  if (post) {
-    post.title = title;
-    post.body = body;
-
-    const updatedPost = await post.save();
-    res.json(updatedPost);
-  } else {
-    res.status(404);
-    throw new Error('Post not found');
+  try {
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        ...req.body,
+      },
+      { new: true }
+    );
+    res.status(200).json(updatedPost);
+  } catch (error) {
+    res.status(400).json({ message: "can't update post", error });
   }
 });
 
