@@ -1,5 +1,6 @@
 const postController = require('../../server/controllers/postController');
 const postModel = require('../../server/models/postModel');
+const categoryModel = require('../../server/models/categoryModel');
 const httpMocks = require('node-mocks-http');
 const newPost = require('../data/new-post.json');
 const allPosts = require('../data/all-posts.json');
@@ -10,6 +11,9 @@ postModel.findById = jest.fn();
 postModel.findByIdAndUpdate = jest.fn();
 postModel.findByIdAndDelete = jest.fn();
 
+categoryModel.create = jest.fn();
+categoryModel.findOne = jest.fn();
+
 const postId = '5fcb556fb94b28d87d5977ec';
 const updatedPost = { title: 'updated title haha', body: 'Updated body haha' };
 
@@ -18,7 +22,6 @@ let req, res;
 beforeEach(() => {
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
-  next = jest.fn();
 });
 
 describe('Post Controller Create', () => {
@@ -31,6 +34,7 @@ describe('Post Controller Create', () => {
   it('should call postModel.create', async () => {
     await postController.createPost(req, res);
     expect(postModel.create).toBeCalledWith(newPost);
+    expect(categoryModel.findOne).toBeCalledWith({ slug: req.body.category });
   });
   it('should return 201 response code', async () => {
     await postController.createPost(req, res);
@@ -49,18 +53,25 @@ describe('post controller get all posts', () => {
     expect(typeof postController.getPosts).toBe('function');
   });
   it('should call postModel.find({})', async () => {
-    await postController.getPosts(req, res, next);
+    await postController.getPosts(req, res);
     expect(postModel.find).toHaveBeenCalledWith({});
   });
   it('should return 200 response', async () => {
-    await postController.getPosts(req, res, next);
+    postModel.find.mockReturnValue(allPosts);
+    await postController.getPosts(req, res);
     expect(res.statusCode).toBe(200);
     expect(res._isEndCalled()).toBeTruthy();
   });
   it('should return json body in response', async () => {
     postModel.find.mockReturnValue(allPosts);
-    await postController.getPosts(req, res, next);
+    await postController.getPosts(req, res);
     expect(res._getJSONData()).toStrictEqual(allPosts);
+  });
+  it("should return 404 when item doesn't exist", async () => {
+    postModel.find.mockReturnValue(null);
+    await postController.getPosts(req, res);
+    expect(res.statusCode).toBe(404);
+    expect(res._isEndCalled()).toBeTruthy;
   });
 });
 

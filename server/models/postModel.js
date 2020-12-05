@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Category = require('./categoryModel');
 
 const postSchema = mongoose.Schema(
   {
@@ -10,6 +11,14 @@ const postSchema = mongoose.Schema(
       type: String,
       required: true,
     },
+    category: {
+      type: String,
+    },
+    tags: [
+      {
+        type: String,
+      },
+    ],
   },
   {
     timestamps: true,
