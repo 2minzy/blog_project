@@ -4,7 +4,7 @@ const Post = require('../models/postModel');
 // @desc    Create a post
 // @route   POST /api/posts
 // @access  admin
-const createPost = asyncHandler(async (req, res) => {
+const createPost = asyncHandler(async (req, res, next) => {
   try {
     const { title, body } = req.body;
     // For slug
@@ -23,10 +23,13 @@ const createPost = asyncHandler(async (req, res) => {
 // @desc    Fetch all prosts
 // @route   GET /api/posts
 // @access  admin
-const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({});
-
-  res.json(posts);
+const getPosts = asyncHandler(async (req, res, next) => {
+  try {
+    const posts = await Post.find({});
+    res.json(posts);
+  } catch (error) {
+    next(error);
+  }
 });
 
 // @desc    Fetch single post
@@ -59,17 +62,18 @@ const deletePost = asyncHandler(async (req, res) => {
 // @route   UPDATE /api/products/:id
 // @access  admin
 const updatePost = asyncHandler(async (req, res) => {
-  try {
-    const updatedPost = await Post.findByIdAndUpdate(
-      req.params.id,
-      {
-        ...req.body,
-      },
-      { new: true }
-    );
+  const updatedPost = await Post.findByIdAndUpdate(
+    req.params.id,
+    {
+      ...req.body,
+    },
+    { new: true }
+  );
+
+  if (updatedPost) {
     res.status(200).json(updatedPost);
-  } catch (error) {
-    res.status(400).json({ message: "can't update post", error });
+  } else {
+    res.status(404).json({ message: "can't update post" });
   }
 });
 
