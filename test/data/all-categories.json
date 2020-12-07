@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Test category name1",
+    "slug": "test-category-slug1"
+  },
+  {
+    "name": "Test category name2",
+    "slug": "test-category-slug2"
+  },
+  {
+    "name": "Test category name3",
+    "slug": "test-category-slug3"
+  }
+]

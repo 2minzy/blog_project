@@ -25,6 +25,7 @@ it('GET /api/posts', async () => {
   expect(Array.isArray(response.body)).toBeTruthy();
   expect(response.body[0].title).toBeDefined();
   expect(response.body[0].body).toBeDefined();
+  expect(response.body[0].tags).toBeDefined();
   firstPost = response.body[0];
 });
 
@@ -45,16 +46,16 @@ it("GET id doesn't exist", async () => {
 it('PUT /api/posts/:id', async () => {
   const response = await request(app)
     .put('/api/posts/' + firstPost._id)
-    .send({ title: 'updated name2', body: 'updated body2' });
+    .send({ title: 'updated title', body: 'updated body' });
   expect(response.statusCode).toBe(200);
-  expect(response.body.title).toBe('updated name2');
-  expect(response.body.body).toBe('updated body2');
+  expect(response.body.title).toBe('updated title');
+  expect(response.body.body).toBe('updated body');
 });
 
 it('should return 404 on PUT /api/posts/:id', async () => {
   const response = await request(app)
     .put('/api/posts/5fcb5078691f7cd4381fdd05')
-    .send({ title: 'updated name2', body: 'updated body2' });
+    .send({ title: 'updated title', body: 'updated body' });
   expect(response.statusCode).toBe(404);
 });
 

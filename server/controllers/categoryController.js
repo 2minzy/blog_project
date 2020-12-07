@@ -38,19 +38,6 @@ const getCategoryById = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Delete a category
-// @route   DELETE /api/category/:id
-// @access  admin
-const deleteCategory = asyncHandler(async (req, res) => {
-  const deletedCategory = await Category.findByIdAndDelete(req.params.id);
-
-  if (deletedCategory) {
-    res.json(deletedCategory);
-  } else {
-    res.status(404).json({ message: 'category not found' });
-  }
-});
-
 // @desc    Update a category
 // @route   UPDATE /api/products/:id
 // @access  admin
@@ -67,6 +54,19 @@ const updateCategory = asyncHandler(async (req, res) => {
     res.status(200).json(updatedCategory);
   } else {
     res.status(404).json({ message: "can't update category" });
+  }
+});
+
+// @desc    Delete a category
+// @route   DELETE /api/category/:id
+// @access  admin
+const deleteCategory = asyncHandler(async (req, res) => {
+  const deletedCategory = await Category.findByIdAndDelete(req.params.id);
+
+  if (deletedCategory) {
+    res.json(deletedCategory);
+  } else {
+    res.status(404).json({ message: 'category not found' });
   }
 });
 

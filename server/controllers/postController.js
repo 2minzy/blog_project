@@ -56,19 +56,6 @@ const getPostById = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Delete a post
-// @route   DELETE /api/products/:id
-// @access  admin
-const deletePost = asyncHandler(async (req, res) => {
-  const deletedPost = await Post.findByIdAndDelete(req.params.id);
-
-  if (deletedPost) {
-    res.json(deletedPost);
-  } else {
-    res.status(404).json({ message: 'post not found' });
-  }
-});
-
 // @desc    Update a post
 // @route   UPDATE /api/products/:id
 // @access  admin
@@ -85,6 +72,19 @@ const updatePost = asyncHandler(async (req, res) => {
     res.status(200).json(updatedPost);
   } else {
     res.status(404).json({ message: "can't update post" });
+  }
+});
+
+// @desc    Delete a post
+// @route   DELETE /api/products/:id
+// @access  admin
+const deletePost = asyncHandler(async (req, res) => {
+  const deletedPost = await Post.findByIdAndDelete(req.params.id);
+
+  if (deletedPost) {
+    res.json(deletedPost);
+  } else {
+    res.status(404).json({ message: 'post not found' });
   }
 });
 

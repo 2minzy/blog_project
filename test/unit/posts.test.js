@@ -15,16 +15,16 @@ categoryModel.create = jest.fn();
 categoryModel.findOne = jest.fn();
 
 const postId = '5fcb556fb94b28d87d5977ec';
-const updatedPost = { title: 'updated title haha', body: 'Updated body haha' };
+const updatedPost = { title: 'updated title', body: 'Updated body' };
 
-// Runs a function before each of the tests in this file runs.
+// beforeEach() means run a function before each of the tests in this file runs.
 let req, res;
 beforeEach(() => {
   req = httpMocks.createRequest();
   res = httpMocks.createResponse();
 });
 
-describe('Post Controller Create', () => {
+describe('Post controller create', () => {
   beforeEach(() => {
     req.body = newPost;
   });
@@ -48,7 +48,7 @@ describe('Post Controller Create', () => {
   });
 });
 
-describe('post controller get all posts', () => {
+describe('Post controller get all posts', () => {
   it('should have a getPosts function', () => {
     expect(typeof postController.getPosts).toBe('function');
   });
@@ -75,8 +75,8 @@ describe('post controller get all posts', () => {
   });
 });
 
-describe('Product Controller getPostById', () => {
-  it('should have a getPosts function', () => {
+describe('Post controller getPostById', () => {
+  it('should have a get function', () => {
     expect(typeof postController.getPostById).toBe('function');
   });
   it('should call postModel.findById', async () => {
@@ -99,9 +99,9 @@ describe('Product Controller getPostById', () => {
   });
 });
 
-describe('Product Controller Update', () => {
+describe('Post controller update', () => {
   it('should have an updatePost function', () => {
-    expect(typeof postController.getPostById).toBe('function');
+    expect(typeof postController.updatePost).toBe('function');
   });
   it('shold call postModel.findByIdAndUpdate', async () => {
     req.params.id = postId;
@@ -131,7 +131,7 @@ describe('Product Controller Update', () => {
 });
 
 describe('Post controller delete', () => {
-  it('should habe a deletePost function', () => {
+  it('should have a deletePost function', () => {
     expect(typeof postController.deletePost).toBe('function');
   });
   it('should call postModel.findByIdAndDelete', async () => {
@@ -142,8 +142,8 @@ describe('Post controller delete', () => {
 
   it('should return 200 response', async () => {
     const deletedPost = {
-      title: 'deletedPost',
-      body: 'it is deleted',
+      title: 'Deleted post',
+      body: 'It is deleted',
     };
     postModel.findByIdAndDelete.mockReturnValue(deletedPost);
     await postController.deletePost(req, res);
