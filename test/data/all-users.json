@@ -1,0 +1,20 @@
+[
+  {
+    "name": "Test user name1",
+    "email": "test1@gamil.com",
+    "password": "test123456",
+    "role": "author"
+  },
+  {
+    "name": "Test user name2",
+    "email": "test2@gamil.com",
+    "password": "test123456",
+    "role": "author"
+  },
+  {
+    "name": "Test user name3",
+    "email": "test3@gamil.com",
+    "password": "test123456",
+    "role": "admin"
+  }
+]

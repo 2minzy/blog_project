@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Category = require('./categoryModel');
 
 const postSchema = mongoose.Schema(
   {

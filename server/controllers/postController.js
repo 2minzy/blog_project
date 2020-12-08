@@ -4,7 +4,7 @@ const Category = require('../models/categoryModel');
 
 // @desc    Create a post
 // @route   POST /api/posts
-// @access  admin
+// @access  Admin
 const createPost = asyncHandler(async (req, res) => {
   try {
     const { title, body, tags = [] } = req.body;
@@ -33,7 +33,7 @@ const createPost = asyncHandler(async (req, res) => {
 
 // @desc    Fetch all prosts
 // @route   GET /api/posts
-// @access  admin
+// @access  Admin
 const getPosts = asyncHandler(async (req, res) => {
   const posts = await Post.find({});
   if (posts) {
@@ -45,7 +45,7 @@ const getPosts = asyncHandler(async (req, res) => {
 
 // @desc    Fetch single post
 // @route   GET /api/posts/:id
-// @access  admin
+// @access  Admin
 const getPostById = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
 
@@ -58,7 +58,7 @@ const getPostById = asyncHandler(async (req, res) => {
 
 // @desc    Update a post
 // @route   UPDATE /api/products/:id
-// @access  admin
+// @access  Admin
 const updatePost = asyncHandler(async (req, res) => {
   const updatedPost = await Post.findByIdAndUpdate(
     req.params.id,
@@ -77,7 +77,7 @@ const updatePost = asyncHandler(async (req, res) => {
 
 // @desc    Delete a post
 // @route   DELETE /api/products/:id
-// @access  admin
+// @access  Admin
 const deletePost = asyncHandler(async (req, res) => {
   const deletedPost = await Post.findByIdAndDelete(req.params.id);
 
