@@ -69,7 +69,7 @@ const updateUser = asyncHandler(async (req, res) => {
   if (user) {
     user.name = req.body.name || user.name;
     user.email = req.body.email || user.email;
-    user.role = req.body.role;
+    user.role = req.body.role || user.role;
 
     const updatedUser = await user.save();
 
@@ -88,11 +88,10 @@ const updateUser = asyncHandler(async (req, res) => {
 // @route      DELETE /api/users/:id
 // @access     Admin
 const deleteUser = asyncHandler(async (req, res) => {
-  const user = await User.findById(req.params.id);
+  const deletedUser = await User.findByIdAndDelete(req.params.id);
 
-  if (user) {
-    await user.remove();
-    res.json({ message: 'User removed' });
+  if (deletedUser) {
+    res.json(deletedUser);
   } else {
     res.status(404).json({ message: 'User not found' });
   }
