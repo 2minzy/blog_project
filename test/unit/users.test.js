@@ -18,6 +18,12 @@ const updatedUser = {
   email: 'test@gmail.com',
   role: 'admin',
 };
+const userProfile = {
+  _id: '5fcb556fb94b28d87d5977ec',
+  name: 'Updated user name',
+  email: 'test@gmail.com',
+  role: 'admin',
+};
 
 // beforeEach() means run a function before each of the tests in this file runs.
 let req, res;
@@ -78,7 +84,7 @@ describe('User controller get all users', () => {
   });
 });
 
-describe('User controller getPostById', () => {
+describe('User controller getUserById', () => {
   it('should have a get function', () => {
     expect(typeof userController.getUserById).toBe('function');
   });
