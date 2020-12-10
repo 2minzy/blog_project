@@ -50,7 +50,7 @@ it('PUT /api/category/:id', async () => {
   expect(response.body.slug).toBe('updated slug');
 });
 
-it('should return 404 on PUT /api/posts/:id', async () => {
+it('should return 404 on PUT /api/category/:id', async () => {
   const response = await request(app)
     .put('/api/category/5fcbc3fb28a8e900bd42e8ea')
     .send({ name: 'updated name', slug: 'updated slug' });

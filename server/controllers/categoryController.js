@@ -39,7 +39,7 @@ const getCategoryById = asyncHandler(async (req, res) => {
 });
 
 // @desc    Update a category
-// @route   UPDATE /api/products/:id
+// @route   UPDATE /api/category/:id
 // @access  Admin
 const updateCategory = asyncHandler(async (req, res) => {
   const updatedCategory = await Category.findByIdAndUpdate(
