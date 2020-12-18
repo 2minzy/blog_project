@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const { toSlug } = require('../utils/slug');
 
 const categorySchema = mongoose.Schema({
   name: {
@@ -16,7 +17,7 @@ categorySchema.pre('save', function (next) {
   const category = this;
 
   if (!category.slug || category.slug === '') {
-    category.slug = category.name.toLowerCase().replace(' ', '-');
+    category.slug = toSlug(category.name);
   }
   next(); // Next strp is saving category into MongoDB database
 });

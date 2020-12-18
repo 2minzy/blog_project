@@ -1,6 +1,7 @@
 const asyncHandler = require('express-async-handler');
 const Post = require('../models/postModel');
 const Category = require('../models/categoryModel');
+const { toSlug } = require('../utils/slug');
 
 // @desc    Create a post
 // @route   POST /api/posts
@@ -12,7 +13,7 @@ const createPost = asyncHandler(async (req, res) => {
 
     // checking if category is exist or not
     // req.body.category = 'USA Travel' -> category = null 'usa-travel'
-    let category = await Category.findOne({ slug: req.body.category });
+    let category = await Category.findOne({ slug: toSlug(req.body.category) });
 
     // req.body.category = undefined?
     if (!category && req.body.category) {
@@ -50,7 +51,7 @@ const getPostById = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id);
 
   if (post) {
-    res.json(post);
+    res.status(200).json(post);
   } else {
     res.status(404).json({ message: 'post not found' });
   }
