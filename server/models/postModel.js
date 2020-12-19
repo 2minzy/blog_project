@@ -24,5 +24,9 @@ const postSchema = mongoose.Schema(
   }
 );
 
+postSchema.set('toJSON', {
+  virtuals: true,
+});
+
 const Post = mongoose.model('Post', postSchema);
 module.exports = Post;

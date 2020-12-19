@@ -6,13 +6,15 @@
   "scripts": {
     "start": "node server/index.js",
     "server": "cross-env NODE_ENV=development nodemon server/index.js",
-    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1"
+    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1",
+    "admin": "npm start --prefix admin"
   },
   "keywords": [],
   "author": "Minij Lee",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
+    "concurrently": "^5.3.0",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",

@@ -1,6 +1,5 @@
 import * as React from 'react';
-import { List, Datagrid, TextField, EmailField } from 'react-admin';
-import MyUrlField from './MyUrlField';
+import { List, Datagrid, TextField, EmailField, DateField } from 'react-admin';
 
 export const UserList = props => (
   <List {...props}>
@@ -8,9 +7,9 @@ export const UserList = props => (
       <TextField source='id' />
       <TextField source='name' />
       <EmailField source='email' />
-      <TextField source='phone' />
-      <MyUrlField source='website' />
-      <TextField source='company.name' />
+      <TextField source='role' />
+      <DateField source='createdAt' />
+      <DateField source='updatedAt' />
     </Datagrid>
   </List>
 );

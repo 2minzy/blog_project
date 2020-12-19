@@ -24,5 +24,9 @@ const commentSchema = mongoose.Schema(
   }
 );
 
+commentSchema.set('toJSON', {
+  virtuals: true,
+});
+
 const Comment = mongoose.model('Comment', commentSchema);
 module.exports = Comment;

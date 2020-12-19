@@ -22,5 +22,9 @@ categorySchema.pre('save', function (next) {
   next(); // Next strp is saving category into MongoDB database
 });
 
+categorySchema.set('toJSON', {
+  virtuals: true,
+});
+
 const Category = mongoose.model('Category', categorySchema);
 module.exports = Category;

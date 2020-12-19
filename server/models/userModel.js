@@ -26,6 +26,10 @@ const userSchema = mongoose.Schema(
   }
 );
 
+userSchema.set('toJSON', {
+  virtuals: true,
+});
+
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };

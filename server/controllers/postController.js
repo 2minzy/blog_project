@@ -36,8 +36,15 @@ const createPost = asyncHandler(async (req, res) => {
 // @route   GET /api/posts
 // @access  Admin
 const getPosts = asyncHandler(async (req, res) => {
-  const posts = await Post.find({});
+  //const range = req.query.range || '[0,9]';
+  //const match = range.match(/\[([0-9]+),([0-9]+)\]/);
+  //const skip = match[1];
+  //const limit = match[2];
+
+  const posts = await Post.find({}); //.skip(skip).limit(limit);
+
   if (posts) {
+    res.set('Content-Range', 'posts 0-24/319');
     res.status(200).json(posts);
   } else {
     res.status(404).json({ message: 'posts not found' });
