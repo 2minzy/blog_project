@@ -24,9 +24,13 @@ const postSchema = mongoose.Schema(
   }
 );
 
+// make id available to frontend without underscore _id -> id
 postSchema.set('toJSON', {
   virtuals: true,
 });
+
+// combine all strings to a single field to make a searching index
+postSchema.index({ '$**': 'text' });
 
 const Post = mongoose.model('Post', postSchema);
 module.exports = Post;

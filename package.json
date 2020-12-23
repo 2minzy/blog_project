@@ -4,10 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server/index.js",
+    "prestart": "kill -9 $(lsof -i :5000 | grep -i -E -o '\\s[0-9]+\\s')",
+    "_": "node server/index.js",
     "server": "cross-env NODE_ENV=development nodemon server/index.js",
-    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1",
-    "admin": "npm start --prefix admin"
+    "admin": "npm start --prefix admin",
+    "start": "concurrently \"npm run server\" \"npm run admin\"",
+    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1"
   },
   "keywords": [],
   "author": "Minij Lee",

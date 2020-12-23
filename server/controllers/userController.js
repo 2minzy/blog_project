@@ -43,6 +43,7 @@ const getUsers = asyncHandler(async (req, res) => {
   try {
     const users = await User.find({});
     if (users) {
+      res.set('Content-Range', 'posts 0-24/319');
       res.status(200).json(users);
     }
   } catch (error) {
