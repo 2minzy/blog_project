@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Comment = require('../models/commentModel');
+const { paginate, getFilter } = require('../utils/crudHelper');
 
 // @desc    Create a comment
 // @route   POST /api/comments
@@ -17,8 +18,13 @@ const createComment = asyncHandler(async (req, res) => {
 // @route   GET /api/comments
 // @access  Public
 const getComments = asyncHandler(async (req, res) => {
-  const comments = await Comment.find({});
+  const [start, end, limit] = paginate(req.query.range);
+  const filter = getFilter(req.query.filter);
+  const comments = await Comment.find(filter).skip(start).limit(limit);
+  const commentsCount = await Comment.countDocuments(filter);
+
   if (comments) {
+    res.set('Content-Range', `posts ${start}-${end}/${commentsCount}`);
     res.json(comments);
   } else {
     res.status(404).json({ message: 'Comments not found' });

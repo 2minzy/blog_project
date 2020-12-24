@@ -1,11 +1,12 @@
 const express = require('express');
+require('./middleware/passport');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
-
 const postRoutes = require('./routes/postRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const userRoutes = require('./routes/userRoutes');
 const commentRoutes = require('./routes/commentRoutes');
+const authRoutes = require('./routes/authRoutes');
 const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
 dotenv.config({ path: envFile });
 
@@ -19,7 +20,7 @@ app.use(express.json());
 app.get('/', (req, res) => {
   res.send('API is running...');
 });
-
+app.use('/api/auth', authRoutes);
 app.use('/api/posts', postRoutes);
 app.use('/api/category', categoryRoutes);
 app.use('/api/users', userRoutes);

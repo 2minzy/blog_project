@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
+const { paginate, getFilter } = require('../utils/crudHelper');
 
 // @desc      Create a new user
 // @route     POST /api/users
@@ -23,7 +24,7 @@ const createUser = asyncHandler(async (req, res) => {
 
     if (createdUser) {
       res.status(201).json({
-        _id: createdUser._id,
+        id: createdUser._id,
         name: createdUser.name,
         email: createdUser.email,
         role: createdUser.role,
@@ -40,10 +41,13 @@ const createUser = asyncHandler(async (req, res) => {
 // @route      GET /api/users
 // @access     Admin
 const getUsers = asyncHandler(async (req, res) => {
+  const [start, end, limit] = paginate(req.query.range);
+  const filter = getFilter(req.query.filter);
+  const users = await User.find(filter).skip(start).limit(limit);
+  const userCount = await User.countDocuments(filter);
   try {
-    const users = await User.find({});
     if (users) {
-      res.set('Content-Range', 'posts 0-24/319');
+      res.set('Content-Range', `users ${start}-${end}/${userCount}`);
       res.status(200).json(users);
     }
   } catch (error) {
@@ -79,7 +83,7 @@ const updateUser = asyncHandler(async (req, res) => {
       const updatedUser = await user.save();
 
       res.json({
-        _id: updatedUser._id,
+        id: updatedUser._id,
         name: updatedUser.name,
         email: updatedUser.email,
         role: updatedUser.role,

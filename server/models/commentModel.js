@@ -24,9 +24,13 @@ const commentSchema = mongoose.Schema(
   }
 );
 
+// make id available to frontend without underscore _id -> id
 commentSchema.set('toJSON', {
   virtuals: true,
 });
+
+// combine all strings to a single field to make a searching index
+commentSchema.index({ '$**': 'text' });
 
 const Comment = mongoose.model('Comment', commentSchema);
 module.exports = Comment;

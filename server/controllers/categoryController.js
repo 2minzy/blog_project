@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Category = require('../models/categoryModel');
+const { paginate, getFilter } = require('../utils/crudHelper');
 
 // @desc    Create a category
 // @route   POST /api/category
@@ -17,8 +18,13 @@ const createCategory = asyncHandler(async (req, res) => {
 // @route   GET /api/category
 // @access  Admin
 const getCategories = asyncHandler(async (req, res) => {
-  const categories = await Category.find({});
+  const [start, end, limit] = paginate(req.query.range);
+  const filter = getFilter(req.query.filter);
+  const categories = await Category.find(filter).skip(start).limit(limit);
+  const commentsCount = await Category.countDocuments(filter);
+
   if (categories) {
+    res.set('Content-Range', `posts ${start}-${end}/${commentsCount}`);
     res.json(categories);
   } else {
     res.status(404).json({ message: 'categories not found' });

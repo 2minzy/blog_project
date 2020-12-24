@@ -4,27 +4,34 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "prestart": "kill -9 $(lsof -i :5000 | grep -i -E -o '\\s[0-9]+\\s')",
-    "_": "node server/index.js",
+    "predev": "kill -9 $(lsof -i :5000 | grep -i -E -o '\\s[0-9]+\\s') || true",
+    "start": "node server/index.js",
     "server": "cross-env NODE_ENV=development nodemon server/index.js",
     "admin": "npm start --prefix admin",
-    "start": "concurrently \"npm run server\" \"npm run admin\"",
-    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1"
+    "dev": "concurrently \"npm run server\" \"npm run admin\"",
+    "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1",
+    "populate": "cross-env NODE_ENV=development node test/factory/populate.js"
   },
   "keywords": [],
   "author": "Minij Lee",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
-    "concurrently": "^5.3.0",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
     "express-async-handler": "^1.1.4",
-    "jest": "^26.6.0",
-    "mongoose": "^5.11.3"
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
+    "mongoose": "^5.11.3",
+    "passport": "^0.4.1",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "concurrently": "^5.3.0",
+    "faker": "^5.1.0",
+    "jest": "^26.6.0",
     "node-mocks-http": "^1.9.0",
     "nodemon": "^2.0.6",
     "supertest": "^6.0.1"

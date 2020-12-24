@@ -26,9 +26,13 @@ const userSchema = mongoose.Schema(
   }
 );
 
+// make id available to frontend without underscore _id -> id
 userSchema.set('toJSON', {
   virtuals: true,
 });
+
+// combine all strings to a single field to make a searching index
+userSchema.index({ '$**': 'text' });
 
 userSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);

@@ -1,10 +1,12 @@
 import React from 'react';
 import { Edit, SimpleForm, TextInput } from 'react-admin';
 
-const PostEdit = props => {
+const CommentEdit = props => {
   return (
-    <Edit title='Edit Post' {...props}>
-      <SimpleForm>
+    <Edit title='Edit Comment' {...props}>
+      <SimpleForm redirect='list'>
+        <TextInput source='name' />
+        <TextInput source='email' />
         <TextInput source='title' />
         <TextInput multiline source='body' />
       </SimpleForm>
@@ -12,4 +14,4 @@ const PostEdit = props => {
   );
 };
 
-export default PostEdit;
+export default CommentEdit;

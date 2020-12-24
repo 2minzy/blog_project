@@ -22,9 +22,13 @@ categorySchema.pre('save', function (next) {
   next(); // Next strp is saving category into MongoDB database
 });
 
+// make id available to frontend without underscore _id -> id
 categorySchema.set('toJSON', {
   virtuals: true,
 });
+
+// combine all strings to a single field to make a searching index
+categorySchema.index({ '$**': 'text' });
 
 const Category = mongoose.model('Category', categorySchema);
 module.exports = Category;
