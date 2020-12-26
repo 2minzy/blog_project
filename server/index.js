@@ -1,5 +1,4 @@
 const express = require('express');
-require('./middleware/passport');
 const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const postRoutes = require('./routes/postRoutes');
@@ -8,7 +7,9 @@ const userRoutes = require('./routes/userRoutes');
 const commentRoutes = require('./routes/commentRoutes');
 const authRoutes = require('./routes/authRoutes');
 const envFile = process.env.NODE_ENV ? `.env.${process.env.NODE_ENV}` : '.env';
-dotenv.config({ path: envFile });
+dotenv.config({ path: envFile }); // process.env only works after this line except NODE_ENV
+
+require('./middleware/passport');
 
 connectDB();
 

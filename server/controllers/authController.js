@@ -16,6 +16,7 @@ const authUser = asyncHandler(async (req, res, next) => {
       }
 
       const token = jwt.sign(user, process.env.PRIVATE_JWT_KEY);
+
       return res.json({ user, token });
     });
   })(req, res, next);

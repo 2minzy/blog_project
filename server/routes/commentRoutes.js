@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
 const {
   createComment,
@@ -8,8 +9,14 @@ const {
   updateComment,
 } = require('../controllers/commentController');
 
-router.route('/').post(createComment).get(getComments);
 router
+  .use(passport.authenticate('jwt', { session: false }))
+  .route('/')
+
+  .post(createComment)
+  .get(getComments);
+router
+  .use(passport.authenticate('jwt', { session: false }))
   .route('/:id')
   .get(getCommentById)
   .delete(deleteComment)

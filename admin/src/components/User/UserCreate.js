@@ -7,10 +7,10 @@ import {
   TextInput,
 } from 'react-admin';
 
-const UserCreate = props => {
+const UserCreate = ({ ...props }) => {
   return (
     <Create title='Create a user' {...props} key={props.id}>
-      <SimpleForm redirect='list'>
+      <SimpleForm redirect='list' defaultValue={{ role: 'user' }}>
         <TextInput source='name' />
         <TextInput source='email' />
         <PasswordInput source='password' initiallyVisible />

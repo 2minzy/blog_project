@@ -1,4 +1,5 @@
 const express = require('express');
+const passport = require('passport');
 const router = express.Router();
 const {
   createPost,
@@ -8,7 +9,16 @@ const {
   updatePost,
 } = require('../controllers/postController');
 
-router.route('/').post(createPost).get(getPosts);
-router.route('/:id').get(getPostById).delete(deletePost).put(updatePost);
+router
+  .use(passport.authenticate('jwt', { session: false }))
+  .route('/')
+  .post(createPost)
+  .get(getPosts);
+router
+  .use(passport.authenticate('jwt', { session: false }))
+  .route('/:id')
+  .get(getPostById)
+  .delete(deletePost)
+  .put(updatePost);
 
 module.exports = router;

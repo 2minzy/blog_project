@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Admin, Resource } from 'react-admin';
+import { Admin, Resource, fetchUtils } from 'react-admin';
 import { PostList } from './components/Post/PostList';
 import { UserList } from './components/User/UserList';
 import { CommentList } from './components/Comment/CommentList';
@@ -19,12 +19,28 @@ import CommentCreate from './components/Comment/CommentCreate';
 import CommentEdit from './components/Comment/CommentEdit';
 import CategoryCreate from './components/Category/CategoryCreate';
 import CategoryEdit from './components/Category/CategoryEdit';
+import MyLoginPage from './MyLoginPage';
+
+const httpClient = (url, options = {}) => {
+  if (!options.headers) {
+    options.headers = new Headers({ Accept: 'application/json' });
+  }
+  const token = localStorage.getItem('token');
+  options.headers.set('Authorization', `Bearer ${token}`);
+  return fetchUtils.fetchJson(url, options);
+};
+
+const dataProvider = simpleRestProvider(
+  'http://localhost:3000/api',
+  httpClient
+);
 
 const App = () => (
   <Admin
     dashboard={Dashboard}
+    loginPage={MyLoginPage}
     authProvider={authProvider}
-    dataProvider={simpleRestProvider('http://localhost:3000/api')}
+    dataProvider={dataProvider}
   >
     <Resource
       name='posts'

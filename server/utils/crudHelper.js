@@ -16,7 +16,7 @@ const paginate = (range, defaultSkip = 0, defaultLimit = 10) => {
 };
 
 const getFilter = query => {
-  const { q } = JSON.parse(query);
+  const { q } = JSON.parse(query || '{}');
 
   if (!q) {
     return {};

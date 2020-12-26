@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 
 const postSchema = mongoose.Schema(
   {
+    publisher: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'User',
+    },
     title: {
       type: String,
       required: true,
@@ -11,7 +16,12 @@ const postSchema = mongoose.Schema(
       required: true,
     },
     category: {
-      type: String,
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+    },
+    comments: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Comment',
     },
     tags: [
       {

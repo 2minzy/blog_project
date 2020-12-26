@@ -1,5 +1,9 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
+const { Strategy: JWTStrategy, ExtractJwt } = require('passport-jwt');
+//const passportJWT = require('passport-jwt');
+//const JWTStrategy = passportJWT.Strategy;
+//const ExtractJWT = passportJWT.ExtractJwt;
 const User = require('../models/userModel');
 
 passport.use(
@@ -30,4 +34,21 @@ passport.use(
   )
 );
 
-// https://medium.com/front-end-weekly/learn-using-jwt-with-passport-authentication-9761539c4314
+passport.use(
+  new JWTStrategy(
+    {
+      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      secretOrKey: process.env.PRIVATE_JWT_KEY,
+    },
+    async (jwtPayload, cb) => {
+      try {
+        const user = await User.findById(jwtPayload.id);
+        return cb(null, user);
+      } catch (e) {
+        return cb(e);
+      }
+    }
+  )
+);
+
+// https://medium.com/front-end-weekly/learn-using-jwt-with-passport-authentication-97ㅋ61539c4314
