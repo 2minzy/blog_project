@@ -21,8 +21,10 @@ const authProvider = {
       }
 
       const { token } = await response.json();
+      const decodedToken = decodeJwt(token);
+      const auth = { token, role: decodedToken.role };
 
-      localStorage.setItem('token', token);
+      localStorage.setItem('auth', JSON.stringify(auth));
     }
   },
 
@@ -30,7 +32,7 @@ const authProvider = {
   checkError: async error => {
     const status = error.status;
     if (status === 401 || status === 403) {
-      localStorage.removeItem('token');
+      localStorage.removeItem('auth');
       throw new Error({ message: false });
     }
     // other error code (404, 500, etc): no need to log out
@@ -38,14 +40,14 @@ const authProvider = {
 
   // // called when the user navigates to a new location, to check for authentication
   checkAuth: async () => {
-    if (!localStorage.getItem('token')) {
+    if (!localStorage.getItem('auth')) {
       throw new Error();
     }
   },
 
   // called when the user clicks on the logout button
   logout: async () => {
-    localStorage.removeItem('token');
+    localStorage.removeItem('auth');
   },
 
   // getIdentity: () => {
@@ -65,7 +67,14 @@ const authProvider = {
 
   getIdentity: () => Promise.resolve(),
   // authorization
-  getPermissions: params => Promise.resolve(),
+  getPermissions: async () => {
+    try {
+      const auth = JSON.parse(localStorage.getItem('auth'));
+      return auth.role;
+    } catch (e) {
+      throw new Error();
+    }
+  },
 };
 
 export default authProvider;

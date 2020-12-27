@@ -1,5 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const Post = require('../models/postModel');
+const User = require('../models/userModel');
 const Category = require('../models/categoryModel');
 const { paginate, getFilter } = require('../utils/crudHelper');
 const { toSlug } = require('../utils/slug');
@@ -9,8 +10,11 @@ const { toSlug } = require('../utils/slug');
 // @access  Admin
 const createPost = asyncHandler(async (req, res) => {
   try {
+    const user = await User.findById(req.user._id);
     const { title, body, tags = [], category = 'uncategorized' } = req.body;
-    const newPost = { title, body, tags };
+
+    // const postSlug = toSlug(title); TODO next lesson
+    const newPost = { title, body, tags, publisher: user._id };
 
     // checking if category is exist or not
     // req.body.category = 'USA Travel' -> category = null 'usa-travel'
@@ -26,8 +30,10 @@ const createPost = asyncHandler(async (req, res) => {
     }
 
     const createdPost = await Post.create(newPost);
+    user.posts.push(createdPost);
+    await user.save();
 
-    res.status(201).json(createdPost);
+    res.status(201).json(newPost);
   } catch (error) {
     res.status(400).json({ message: "can't create post", error });
   }
@@ -38,8 +44,16 @@ const createPost = asyncHandler(async (req, res) => {
 // @access  Admin
 const getPosts = asyncHandler(async (req, res) => {
   const [start, end, limit] = paginate(req.query.range); // GET api/posts?range=[start,end]
-  const filter = getFilter(req.query.filter); // GET api/posts?filter={"title": "string"}
-  const posts = await Post.find(filter).skip(start).limit(limit);
+  const filter = getFilter(req.query.filter); // GET api/posts?filter={"q": "search text"}
+
+  if (req.user.role !== 'admin') {
+    filter.publisher = req.user._id;
+  }
+
+  const posts = await Post.find(filter)
+    .skip(start)
+    .limit(limit)
+    .populate('publisher', 'name -_id');
   const postCount = await Post.countDocuments(filter);
 
   if (posts) {
@@ -78,7 +92,7 @@ const updatePost = asyncHandler(async (req, res) => {
   if (updatedPost) {
     res.status(200).json(updatedPost);
   } else {
-    res.status(404).json({ message: "can't update post" });
+    res.status(400).json({ message: "can't update post" });
   }
 });
 

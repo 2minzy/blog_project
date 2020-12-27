@@ -1,9 +1,6 @@
 const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const { Strategy: JWTStrategy, ExtractJwt } = require('passport-jwt');
-//const passportJWT = require('passport-jwt');
-//const JWTStrategy = passportJWT.Strategy;
-//const ExtractJWT = passportJWT.ExtractJwt;
 const User = require('../models/userModel');
 
 passport.use(
@@ -24,6 +21,7 @@ passport.use(
         const payload = {
           id: user._id,
           email: user.email,
+          role: user.role,
         };
 
         return cb(null, payload, { message: 'Logged In Successfully' });

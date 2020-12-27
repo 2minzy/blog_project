@@ -25,8 +25,8 @@ const httpClient = (url, options = {}) => {
   if (!options.headers) {
     options.headers = new Headers({ Accept: 'application/json' });
   }
-  const token = localStorage.getItem('token');
-  options.headers.set('Authorization', `Bearer ${token}`);
+  const auth = JSON.parse(localStorage.getItem('auth'));
+  options.headers.set('Authorization', `Bearer ${auth.token}`);
   return fetchUtils.fetchJson(url, options);
 };
 
@@ -35,45 +35,49 @@ const dataProvider = simpleRestProvider(
   httpClient
 );
 
-const App = () => (
-  <Admin
-    dashboard={Dashboard}
-    loginPage={MyLoginPage}
-    authProvider={authProvider}
-    dataProvider={dataProvider}
-  >
-    <Resource
-      name='posts'
-      list={PostList}
-      icon={PostIcon}
-      create={PostCreate}
-      edit={PostEdit}
-    />
+const App = () => {
+  return (
+    <Admin
+      dashboard={Dashboard}
+      loginPage={MyLoginPage}
+      authProvider={authProvider}
+      dataProvider={dataProvider}
+    >
+      {permissions => [
+        <Resource
+          name='posts'
+          list={PostList}
+          icon={PostIcon}
+          create={PostCreate}
+          edit={PostEdit}
+        />,
+        permissions === 'admin' && (
+          <Resource
+            name='users'
+            list={UserList}
+            icon={UserIcon}
+            create={UserCreate}
+            edit={UserEdit}
+          />
+        ),
+        <Resource
+          name='comments'
+          list={CommentList}
+          icon={ChatIcon}
+          create={CommentCreate}
+          edit={CommentEdit}
+        />,
 
-    <Resource
-      name='users'
-      list={UserList}
-      icon={UserIcon}
-      create={UserCreate}
-      edit={UserEdit}
-    />
-
-    <Resource
-      name='comments'
-      list={CommentList}
-      icon={ChatIcon}
-      create={CommentCreate}
-      edit={CommentEdit}
-    />
-
-    <Resource
-      name='category'
-      list={CategoryList}
-      icon={CategoryIcon}
-      create={CategoryCreate}
-      edit={CategoryEdit}
-    />
-  </Admin>
-);
+        <Resource
+          name='category'
+          list={CategoryList}
+          icon={CategoryIcon}
+          create={CategoryCreate}
+          edit={CategoryEdit}
+        />,
+      ]}
+    </Admin>
+  );
+};
 
 export default App;

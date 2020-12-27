@@ -6,7 +6,7 @@
   "scripts": {
     "predev": "kill -9 $(lsof -i :5000 | grep -i -E -o '\\s[0-9]+\\s') || true",
     "start": "node server/index.js",
-    "server": "cross-env NODE_ENV=development nodemon server/index.js",
+    "server": "cross-env NODE_ENV=development nodemon --delay 1500 server/index.js",
     "admin": "npm start --prefix admin",
     "dev": "concurrently \"npm run server\" \"npm run admin\"",
     "test": "jest --forceExit --detectOpenHandles  --watchAll --maxWorkers=1",

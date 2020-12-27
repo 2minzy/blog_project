@@ -16,13 +16,12 @@ const postSchema = mongoose.Schema(
       required: true,
     },
     category: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Category',
+      type: String
     },
-    comments: {
+    comments: [{
       type: mongoose.Schema.Types.ObjectId,
       ref: 'Comment',
-    },
+    }],
     tags: [
       {
         type: String,

@@ -25,6 +25,7 @@ export const PostList = props => (
   <List filters={<PostFilter />} {...props}>
     <Datagrid>
       <TextField source='title' />
+      <TextField label='Publisher' source='publisher.name' />
       <DateField source='createdAt' />
       <DateField source='updatedAt' />
       <EditButton basePath='/posts' />
