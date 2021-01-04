@@ -1,6 +1,6 @@
 const asyncHandler = require('express-async-handler');
 const User = require('../models/userModel');
-const { paginate, getFilter } = require('../utils/crudHelper');
+const { getRange, getFilter } = require('../utils/crudHelper');
 
 // @desc      Create a new user
 // @route     POST /api/users
@@ -41,7 +41,7 @@ const createUser = asyncHandler(async (req, res) => {
 // @route      GET /api/users
 // @access     Admin
 const getUsers = asyncHandler(async (req, res) => {
-  const [start, end, limit] = paginate(req.query.range);
+  const [start, end, limit] = getRange(req.query.range);
   const filter = getFilter(req.query.filter);
   const users = await User.find(filter).skip(start).limit(limit);
   const userCount = await User.countDocuments(filter);

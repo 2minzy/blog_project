@@ -16,17 +16,23 @@ const postSchema = mongoose.Schema(
       required: true,
     },
     category: {
-      type: String
+      type: String,
     },
-    comments: [{
-      type: mongoose.Schema.Types.ObjectId,
-      ref: 'Comment',
-    }],
+    comments: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Comment',
+      },
+    ],
     tags: [
       {
         type: String,
       },
     ],
+    slug: {
+      type: String,
+      unique: true,
+    },
   },
   {
     timestamps: true,

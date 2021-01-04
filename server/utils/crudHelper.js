@@ -1,4 +1,4 @@
-const paginate = (range, defaultSkip = 0, defaultLimit = 10) => {
+const getRange = (range, defaultSkip = 0, defaultLimit = 10) => {
   let start, end, limit;
 
   if (!range) {
@@ -15,6 +15,11 @@ const paginate = (range, defaultSkip = 0, defaultLimit = 10) => {
   return [start, end, limit];
 };
 
+const getPagination = (page = 1, limit = 9) => {
+  const skip = (page - 1) * limit;
+  return [skip, limit];
+};
+
 const getFilter = query => {
   const { q } = JSON.parse(query || '{}'); // query = '{"q": "search text"}' of type string
 
@@ -26,6 +31,7 @@ const getFilter = query => {
 };
 
 module.exports = {
-  paginate,
+  getRange,
+  getPagination,
   getFilter,
 };

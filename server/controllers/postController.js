@@ -2,7 +2,7 @@ const asyncHandler = require('express-async-handler');
 const Post = require('../models/postModel');
 const User = require('../models/userModel');
 const Category = require('../models/categoryModel');
-const { paginate, getFilter } = require('../utils/crudHelper');
+const { getRange, getFilter } = require('../utils/crudHelper');
 const { toSlug } = require('../utils/slug');
 
 // @desc    Create a post
@@ -13,8 +13,18 @@ const createPost = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user._id);
     const { title, body, tags = [], category = 'uncategorized' } = req.body;
 
-    // const postSlug = toSlug(title); TODO next lesson
     const newPost = { title, body, tags, publisher: user._id };
+
+    // create post slug
+    const slug = toSlug(req.body.slug || title);
+    let slugTmp = slug;
+    let n = 1;
+
+    while (await Post.findOne({ slug: slugTmp })) {
+      slugTmp = `${slug}-${n++}`; // prevent from `title-1-2-3-4` using slugTmp as temporary variable
+    }
+
+    newPost.slug = slugTmp; // post slug created
 
     // checking if category is exist or not
     // req.body.category = 'USA Travel' -> category = null 'usa-travel'
@@ -43,7 +53,7 @@ const createPost = asyncHandler(async (req, res) => {
 // @route   GET /api/posts
 // @access  Admin
 const getPosts = asyncHandler(async (req, res) => {
-  const [start, end, limit] = paginate(req.query.range); // GET api/posts?range=[start,end]
+  const [start, end, limit] = getRange(req.query.range); // GET api/posts?range=[start,end]
   const filter = getFilter(req.query.filter); // GET api/posts?filter={"q": "search text"}
 
   if (req.user.role !== 'admin') {

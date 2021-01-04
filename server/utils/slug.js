@@ -1,4 +1,4 @@
-const toSlug = str => str.toLowerCase().replace(' ', '-');
+const toSlug = str => str.trim().toLowerCase().replace(' ', '-');
 
 module.exports = {
   toSlug,

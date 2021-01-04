@@ -1,10 +1,10 @@
 const asyncHandler = require('express-async-handler');
 const Comment = require('../models/commentModel');
-const { paginate, getFilter } = require('../utils/crudHelper');
+const { getRange, getFilter } = require('../utils/crudHelper');
 
 // @desc    Create a comment
 // @route   POST /api/comments
-// @access  Public
+// @access  Admin
 const createComment = asyncHandler(async (req, res) => {
   try {
     const createdComment = await Comment.create({ ...req.body });
@@ -16,9 +16,9 @@ const createComment = asyncHandler(async (req, res) => {
 
 // @desc    Fetch all comments
 // @route   GET /api/comments
-// @access  Public
+// @access  Admin
 const getComments = asyncHandler(async (req, res) => {
-  const [start, end, limit] = paginate(req.query.range);
+  const [start, end, limit] = getRange(req.query.range);
   const filter = getFilter(req.query.filter);
   const comments = await Comment.find(filter).skip(start).limit(limit);
   const commentsCount = await Comment.countDocuments(filter);
@@ -33,7 +33,7 @@ const getComments = asyncHandler(async (req, res) => {
 
 // @desc    Fetch single comment
 // @route   GET /api/comments/:id
-// @access  Public
+// @access  Admin
 const getCommentById = asyncHandler(async (req, res) => {
   const comment = await Comment.findById(req.params.id);
 
@@ -46,7 +46,7 @@ const getCommentById = asyncHandler(async (req, res) => {
 
 // @desc    Update a comment
 // @route   UPDATE /api/comments/:id
-// @access  Public
+// @access  Admin
 const updateComment = asyncHandler(async (req, res) => {
   const updatedComment = await Comment.findByIdAndUpdate(
     req.params.id,
@@ -65,7 +65,7 @@ const updateComment = asyncHandler(async (req, res) => {
 
 // @desc    Delete a comment
 // @route   DELETE /api/comments/:id
-// @access  Public
+// @access  Admin
 const deleteComment = asyncHandler(async (req, res) => {
   const deletedComment = await Comment.findByIdAndDelete(req.params.id);
 

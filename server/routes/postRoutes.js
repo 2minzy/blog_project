@@ -15,6 +15,7 @@ router
   .route('/')
   .post(createPost)
   .get(getPosts);
+
 router
   .use(passport.authenticate('jwt', { session: false }))
   .route('/:id')
