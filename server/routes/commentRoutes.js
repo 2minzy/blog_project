@@ -12,7 +12,6 @@ const {
 router
   .use(passport.authenticate('jwt', { session: false }))
   .route('/')
-
   .post(createComment)
   .get(getComments);
 router
