@@ -15,7 +15,7 @@ const getRange = (range, defaultSkip = 0, defaultLimit = 10) => {
   return [start, end, limit];
 };
 
-const getPagination = (page = 1, limit = 9) => {
+const getPagination = (page = 1, limit = 8) => {
   const skip = (page - 1) * limit;
   return [skip, limit];
 };
