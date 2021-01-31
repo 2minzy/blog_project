@@ -19,7 +19,7 @@ const Sidebar = () => (
       <Footer>
         <p>CONTACT</p>
         <hr />
-        <p>2021 &copy; Minji Lee</p>
+        <p>&copy; {new Date().getFullYear()} | Minji Lee</p>
       </Footer>
     </Profile>
   </ProfileContainer>
